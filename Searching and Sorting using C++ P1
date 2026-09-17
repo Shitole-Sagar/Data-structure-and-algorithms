@@ -1,0 +1,86 @@
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+struct Student {
+    int id;
+    string name;
+    float cgpa;
+};
+
+int main() {
+    int n, key;
+    cout << "Enter number of students: ";
+    cin >> n;
+
+    Student s[n];
+
+    // Input
+    for (int i = 0; i < n; i++) {
+        cout << "\nEnter ID, Name, CGPA: ";
+        cin >> s[i].id >> s[i].name >> s[i].cgpa;
+    }
+
+    // Linear Search
+    cout << "\nEnter ID to search: ";
+    cin >> key;
+
+    bool found = false;
+    for (int i = 0; i < n; i++) {
+        if (s[i].id == key) {
+            cout << "Found using Linear Search\n";
+            found = true;
+            break;
+        }
+    }
+    if (!found)
+        cout << "Not Found\n";
+
+    // Bubble Sort by Name
+    for (int i = 0; i < n - 1; i++)
+     for (int j = 0; j < n - i - 1; j++)
+            if (s[j].name > s[j + 1].name)
+                swap(s[j], s[j + 1]);
+
+    cout << "\nSorted by Name:\n";
+    for (int i = 0; i < n; i++)
+        cout << s[i].id << " " << s[i].name << " " << s[i].cgpa << endl;
+
+    // Selection Sort by CGPA
+    for (int i = 0; i < n - 1; i++) {
+        int min = i;
+        for (int j = i + 1; j < n; j++)
+            if (s[j].cgpa < s[min].cgpa)
+                min = j;
+        swap(s[i], s[min]);
+    }
+
+    cout << "\nSorted by CGPA:\n";
+    for (int i = 0; i < n; i++)
+        cout << s[i].id << " " << s[i].name << " " << s[i].cgpa << endl;
+
+    // Binary Search
+    sort(s, s + n, [](Student a, Student b) {
+        return a.id < b.id;
+    });
+
+    int low = 0, high = n - 1;
+    found = false;
+  while (low <= high) {
+        int mid = (low + high) / 2;
+        if (s[mid].id == key) {
+            found = true;
+            break;
+        }
+        if (key < s[mid].id)
+            high = mid - 1;
+        else
+            low = mid + 1;
+    }
+    if (found)
+        cout << "\nFound using Binary Search";
+    else
+        cout << "\nNot Found";
+
+    return 0;
+}
