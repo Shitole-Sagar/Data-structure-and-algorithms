@@ -1,0 +1,164 @@
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+using namespace std;
+
+// Node structure
+struct Node
+{
+    char data;
+    Node* next;
+};
+
+// Stack using Linked List
+class Stack
+{
+    Node* top;
+
+public:
+    Stack()
+    {
+        top = NULL;
+    }
+
+    // Push element
+    void push(char x)
+    {
+        Node* temp = new Node;
+        temp->data = x;
+        temp->next = top;
+        top = temp;
+    }
+
+    // Pop element
+    char pop()
+    {
+        if (top == NULL)
+            return '#';
+
+        Node* temp = top;
+        char ch = temp->data;
+        top = top->next;
+        delete temp;
+        return ch;
+    }
+
+    // Top element
+    char peek()
+    {
+        if (top == NULL)
+            return '#';
+
+        return top->data;
+    }
+
+    // Check stack empty
+    bool isEmpty()
+    {
+        return top == NULL;
+    }
+};
+
+// Operator Priority
+int priority(char op)
+{
+    if (op == '^')
+        return 3;
+    if (op == '*' || op == '/')
+        return 2;
+    if (op == '+' || op == '-')
+        return 1;
+
+    return 0;
+}
+
+// Check Operand
+bool operand(char ch)
+{
+    if ((ch >= 'A' && ch <= 'Z') ||
+        (ch >= 'a' && ch <= 'z') ||
+        (ch >= '0' && ch <= '9'))
+        return true;
+
+    return false;
+}
+
+// Infix to Postfix
+string infixToPostfix(string exp)
+{
+    Stack s;
+    string result = "";
+
+    for (int i = 0; i < exp.length(); i++)
+    {
+        char ch = exp[i];
+
+        if (operand(ch))
+        {
+            result += ch;
+        }
+        else if (ch == '(')
+        {
+            s.push(ch);
+        }
+        else if (ch == ')')
+        {
+            while (!s.isEmpty() && s.peek() != '(')
+            {
+                result += s.pop();
+            }
+            s.pop();
+        }
+        else
+        {
+            while (!s.isEmpty() &&
+                   priority(s.peek()) >= priority(ch))
+            {
+                result += s.pop();
+            }
+
+            s.push(ch);
+        }
+    }
+
+    while (!s.isEmpty())
+    {
+        result += s.pop();
+    }
+
+    return result;
+}
+
+// Infix to Prefix
+string infixToPrefix(string exp)
+{
+    reverse(exp.begin(), exp.end());
+
+    for (int i = 0; i < exp.length(); i++)
+    {
+        if (exp[i] == '(')
+            exp[i] = ')';
+        else if (exp[i] == ')')
+            exp[i] = '(';
+    }
+
+    string postfix = infixToPostfix(exp);
+
+    reverse(postfix.begin(), postfix.end());
+
+    return postfix;
+}
+
+// Main Function
+int main()
+{
+    string exp;
+
+    cout << "Enter Infix Expression : ";
+    cin >> exp;
+
+    cout << "\nPostfix Expression : " << infixToPostfix(exp);
+    cout << "\nPrefix Expression  : " << infixToPrefix(exp);
+
+    return 0;
+}
