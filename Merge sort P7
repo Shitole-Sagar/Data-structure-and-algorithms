@@ -1,0 +1,55 @@
+# Merge Sort
+
+def mergeSort(arr):
+    if len(arr) > 1:
+
+        mid = len(arr) // 2
+        left = arr[:mid]
+        right = arr[mid:]
+
+        mergeSort(left)
+        mergeSort(right)
+
+        i = j = k = 0
+
+        # Merge the two halves
+        while i < len(left) and j < len(right):
+
+            if left[i] < right[j]:
+                arr[k] = left[i]
+                i += 1
+            else:
+                arr[k] = right[j]
+                j += 1
+
+            k += 1
+
+        # Copy remaining elements
+        while i < len(left):
+            arr[k] = left[i]
+            i += 1
+            k += 1
+
+        while j < len(right):
+            arr[k] = right[j]
+            j += 1
+            k += 1
+
+
+# Main Program
+
+orders = []
+
+n = int(input("Enter number of online orders: "))
+
+for i in range(n):
+    time = int(input("Enter delivery time (minutes): "))
+    orders.append(time)
+
+print("\nOriginal Delivery Times:")
+print(orders)
+
+mergeSort(orders)
+
+print("\nSorted Delivery Times (Quickest First):")
+print(orders)
