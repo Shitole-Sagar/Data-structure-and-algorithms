@@ -1,0 +1,34 @@
+def naive_string_match(text, pattern):
+    """
+    Finds all indices where the pattern occurs within the given text
+    using the Naive String Matching approach.
+    """
+    n = len(text)
+    m = len(pattern)
+    found = False
+
+    print("\nPattern found at index:")
+
+    # Slide the pattern over the text one by one
+    for i in range(n - m + 1):
+        # Check if the current substring matches the pattern
+        if text[i:i+m] == pattern:
+            print(i)
+            found = True
+
+    if not found:
+        print("Pattern not found")
+
+
+# ---------------- Main Program ---------------- #
+if __name__ == "__main__":
+    text_input = input("Enter Text: ")
+    pattern_input = input("Enter Pattern: ")
+
+    # Check for empty pattern edge case
+    if not pattern_input:
+        print("Error: The pattern to search for cannot be empty.")
+    elif len(pattern_input) > len(text_input):
+        print("Pattern is longer than the text; match not possible.")
+    else:
+        naive_string_match(text_input, pattern_input)
