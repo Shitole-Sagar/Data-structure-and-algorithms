@@ -1,0 +1,46 @@
+# Fractional Knapsack using Greedy Algorithm
+
+n = int(input("Enter number of parcels: "))
+
+items = []
+
+for i in range(n):
+    weight = float(input("Enter weight: "))
+    profit = float(input("Enter profit: "))
+
+    ratio = profit / weight
+    items.append([weight, profit, ratio])
+
+capacity = float(input("Enter truck capacity: "))
+
+# Sort by profit/weight ratio in descending order
+items.sort(key=lambda x: x[2], reverse=True)
+
+totalProfit = 0
+
+print("\nSelected Parcels:")
+
+for item in items:
+    weight = item[0]
+    profit = item[1]
+
+    if capacity == 0:
+        break
+
+    if weight <= capacity:
+        print("Full Parcel -> Weight:", weight,
+              " Profit:", profit)
+
+        capacity -= weight
+        totalProfit += profit
+
+    else:
+        fraction = capacity / weight
+
+        print("Partial Parcel -> Weight:", capacity,
+              " Profit:", round(profit * fraction, 2))
+
+        totalProfit += profit * fraction
+        capacity = 0
+
+print("\nMaximum Profit =", round(totalProfit, 2))
